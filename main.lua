@@ -2,6 +2,7 @@ push = require 'push'
 Class = require 'class'
 
 require 'Bird'
+require 'Pipe'
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -37,6 +38,7 @@ function love.load()
         })
 
     bird = Bird()
+    pipe = Pipe()
 
     love.keyboard.keysPressed = {}
 
@@ -71,9 +73,12 @@ function love.draw()
 
     love.graphics.draw(background, -backgroundScroll, 0)
 
+    pipe:render()
+
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
     bird:render()
+
 
     push:finish()
 
