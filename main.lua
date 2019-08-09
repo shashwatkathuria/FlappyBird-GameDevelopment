@@ -3,12 +3,18 @@ Class = require 'class'
 
 require 'Bird'
 require 'Pipe'
+require 'PipePair'
+
+SPAWNING_TIME = 1
+
+spawnCountdown = 0
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
+local latestY = 0
 
 local background = love.graphics.newImage('background.png')
 local ground = love.graphics.newImage('ground.png')
@@ -21,7 +27,13 @@ groundSpeed = 200
 
 BACKGROUND_LOOPING_POINT = 413
 
+PIPE_GAP = 80
 GRAVITY = 20
+
+PIPE_PAIR_LOWER_LIMIT = 40
+PIPE_PAIR_UPPER_LIMIT = 155
+
+local pipePairs = {}
 
 JUMP_VELOCITY = 500
 
@@ -36,9 +48,12 @@ function love.load()
             fullscreen = false,
             resizable = true
         })
-
     bird = Bird()
-    pipe = Pipe()
+
+    math.randomseed(os.time())
+    latestY = math.random(PIPE_PAIR_LOWER_LIMIT, PIPE_PAIR_UPPER_LIMIT)
+    pipePair = PipePair(latestY, PIPE_GAP)
+    table.insert(pipePairs, pipePair)
 
     love.keyboard.keysPressed = {}
 
@@ -64,7 +79,27 @@ end
 function love.update(dt)
     backgroundScroll = (backgroundScroll + backgroundSpeed * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + groundSpeed * dt) % VIRTUAL_WIDTH
+    spawnCountdown = spawnCountdown + dt
+    if spawnCountdown > SPAWNING_TIME then
+      latestY = math.random(PIPE_PAIR_LOWER_LIMIT, PIPE_PAIR_UPPER_LIMIT)
+      newPipePair = PipePair(latestY, PIPE_GAP)
+      table.insert(pipePairs, newPipePair)
+      spawnCountdown = spawnCountdown % SPAWNING_TIME
+    end
     bird:update(dt)
+
+    for i = 1, #pipePairs do
+        pipePairs[i]:update(dt)
+    end
+
+    for k, pair in pairs(pipePairs) do
+            if pair.bottomPipe.x + pair.bottomPipe.width < 0 then
+                table.remove(pipePairs, k)
+            end
+    end
+
+    print(#pipePairs)
+
     love.keyboard.keysPressed = {}
 end
 
@@ -73,7 +108,9 @@ function love.draw()
 
     love.graphics.draw(background, -backgroundScroll, 0)
 
-    pipe:render()
+    for i = 1, #pipePairs do
+        pipePairs[i]:render()
+    end
 
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
