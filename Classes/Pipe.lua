@@ -1,7 +1,7 @@
 Pipe = Class{}
 
 function Pipe:init(orientation, y)
-    self.image = love.graphics.newImage('pipe.png')
+    self.image = love.graphics.newImage('Images/pipe.png')
 
     self.height = self.image:getHeight()
     self.width = self.image:getWidth()

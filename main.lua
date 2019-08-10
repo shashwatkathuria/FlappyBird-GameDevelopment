@@ -1,9 +1,9 @@
-push = require 'push'
-Class = require 'class'
+push = require 'Libraries/push'
+Class = require 'Libraries/class'
 
-require 'Bird'
-require 'Pipe'
-require 'PipePair'
+require 'Classes/Bird'
+require 'Classes/Pipe'
+require 'Classes/PipePair'
 
 SPAWNING_TIME = 1
 
@@ -16,8 +16,8 @@ VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 local latestY = 0
 
-local background = love.graphics.newImage('background.png')
-local ground = love.graphics.newImage('ground.png')
+local background = love.graphics.newImage('Images/background.png')
+local ground = love.graphics.newImage('Images/ground.png')
 
 backgroundScroll = 0
 groundScroll = 0
