@@ -18,6 +18,29 @@ function Pipe:init(orientation, y)
 
 end
 
+function Pipe:collides(bird, pipeGap)
+
+    collisionNearness = 10
+    if self.x + collisionNearness > bird.x + bird.width or bird.x + collisionNearness > self.x + self.width  then
+      return false
+    end
+    if self.orientation == "bottom" then
+        if self.y + collisionNearness > bird.y + bird.height  or bird.y > self.y + self.height + collisionNearness then
+          return false
+        end
+    else
+        if bird.y + collisionNearness > self.y  then
+          return false
+        end
+    end
+
+    GRAVITY = 0
+    bird.vy = 0
+    backgroundSpeed = 0
+    groundSpeed = 0
+    return true
+end
+
 function Pipe:update(dt)
     self.x = self.x - groundSpeed * dt
 
