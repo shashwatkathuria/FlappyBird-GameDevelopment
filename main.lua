@@ -98,7 +98,14 @@ function love.update(dt)
             end
     end
 
-    print(#pipePairs)
+    for i = 1, #pipePairs do
+        if pipePairs[i]:collides(bird) then
+          print("Collided", os.time())
+          print("\n\n\n")
+        end
+    end
+
+    -- print(#pipePairs)
 
     love.keyboard.keysPressed = {}
 end
