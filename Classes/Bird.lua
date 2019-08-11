@@ -8,6 +8,7 @@ function Bird:init()
     self.x = VIRTUAL_WIDTH / 2 - self.width / 2
     self.y = VIRTUAL_HEIGHT / 2 - self.height / 2
     self.vy = 0
+    self.score = 0
 end
 
 function Bird:update(dt)
