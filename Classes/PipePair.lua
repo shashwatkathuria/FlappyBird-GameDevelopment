@@ -17,3 +17,8 @@ function PipePair:render(dt)
     self.topPipe:render()
     self.bottomPipe:render()
 end
+
+function PipePair:collides(bird)
+
+    return self.bottomPipe:collides(bird) or self.topPipe:collides(bird, self.pipeGap)
+end
