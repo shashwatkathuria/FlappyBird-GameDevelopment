@@ -5,6 +5,9 @@ require 'Classes/Bird'
 require 'Classes/Pipe'
 require 'Classes/PipePair'
 
+require 'Classes/StateMachine'
+require 'States/PlayState'
+
 SPAWNING_TIME = 1
 
 spawnCountdown = 0
@@ -48,12 +51,12 @@ function love.load()
             fullscreen = false,
             resizable = true
         })
-    bird = Bird()
 
-    math.randomseed(os.time())
-    latestY = math.random(PIPE_PAIR_LOWER_LIMIT, PIPE_PAIR_UPPER_LIMIT)
-    pipePair = PipePair(latestY, PIPE_GAP)
-    table.insert(pipePairs, pipePair)
+    stateMachine = StateMachine {
+        ['play'] = function() return PlayState() end
+    }
+
+    stateMachine:change('play')
 
     love.keyboard.keysPressed = {}
 
@@ -79,33 +82,8 @@ end
 function love.update(dt)
     backgroundScroll = (backgroundScroll + backgroundSpeed * dt) % BACKGROUND_LOOPING_POINT
     groundScroll = (groundScroll + groundSpeed * dt) % VIRTUAL_WIDTH
-    spawnCountdown = spawnCountdown + dt
-    if spawnCountdown > SPAWNING_TIME then
-      latestY = math.random(PIPE_PAIR_LOWER_LIMIT, PIPE_PAIR_UPPER_LIMIT)
-      newPipePair = PipePair(latestY, PIPE_GAP)
-      table.insert(pipePairs, newPipePair)
-      spawnCountdown = spawnCountdown % SPAWNING_TIME
-    end
-    bird:update(dt)
 
-    for i = 1, #pipePairs do
-        pipePairs[i]:update(dt)
-    end
-
-    for k, pair in pairs(pipePairs) do
-            if pair.bottomPipe.x + pair.bottomPipe.width < 0 then
-                table.remove(pipePairs, k)
-            end
-    end
-
-    for i = 1, #pipePairs do
-        if pipePairs[i]:collides(bird) then
-          print("Collided", os.time())
-          print("\n\n\n")
-        end
-    end
-
-    -- print(#pipePairs)
+    stateMachine:update(dt)
 
     love.keyboard.keysPressed = {}
 end
@@ -115,14 +93,9 @@ function love.draw()
 
     love.graphics.draw(background, -backgroundScroll, 0)
 
-    for i = 1, #pipePairs do
-        pipePairs[i]:render()
-    end
+    stateMachine:render()
 
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-
-    bird:render()
-
 
     push:finish()
 
