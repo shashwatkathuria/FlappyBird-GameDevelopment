@@ -6,7 +6,10 @@ require 'Classes/Pipe'
 require 'Classes/PipePair'
 
 require 'Classes/StateMachine'
+require 'States/BaseState'
 require 'States/PlayState'
+require 'States/TitleState'
+
 
 SPAWNING_TIME = 1
 
@@ -44,7 +47,7 @@ function love.load()
 
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    love.window.setTitle('Fifty Bird')
+    love.window.setTitle('Flappy Bird')
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
             vsync = true,
@@ -52,11 +55,18 @@ function love.load()
             resizable = true
         })
 
+    smallFont = love.graphics.newFont('Fonts/flappy.ttf', 8)
+    mediumFont = love.graphics.newFont('Fonts/flappy.ttf', 16)
+    largeFont = love.graphics.newFont('Fonts/flappy.ttf', 48)
+
+    love.graphics.setFont(largeFont)
+
     stateMachine = StateMachine {
-        ['play'] = function() return PlayState() end
+        ['play'] = function() return PlayState() end,
+        ['title'] = function() return TitleState() end
     }
 
-    stateMachine:change('play')
+    stateMachine:change('title')
 
     love.keyboard.keysPressed = {}
 
