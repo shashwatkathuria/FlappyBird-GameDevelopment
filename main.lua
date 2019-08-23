@@ -9,9 +9,10 @@ require 'Classes/StateMachine'
 require 'States/BaseState'
 require 'States/PlayState'
 require 'States/TitleState'
+require 'States/EndState'
 
 
-SPAWNING_TIME = 1
+SPAWNING_TIME = 0.9
 
 spawnCountdown = 0
 
@@ -43,6 +44,10 @@ local pipePairs = {}
 
 JUMP_VELOCITY = 500
 
+score = 0
+
+scrolling = true
+
 function love.load()
 
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -55,15 +60,16 @@ function love.load()
             resizable = true
         })
 
-    smallFont = love.graphics.newFont('Fonts/flappy.ttf', 8)
-    mediumFont = love.graphics.newFont('Fonts/flappy.ttf', 16)
-    largeFont = love.graphics.newFont('Fonts/flappy.ttf', 48)
+    smallFont = love.graphics.newFont('Fonts/font.ttf', 8)
+    mediumFont = love.graphics.newFont('Fonts/font.ttf', 16)
+    largeFont = love.graphics.newFont('Fonts/font.ttf', 64)
 
     love.graphics.setFont(largeFont)
 
     stateMachine = StateMachine {
         ['play'] = function() return PlayState() end,
-        ['title'] = function() return TitleState() end
+        ['title'] = function() return TitleState() end,
+        ['end'] = function() return EndState() end
     }
 
     stateMachine:change('title')
