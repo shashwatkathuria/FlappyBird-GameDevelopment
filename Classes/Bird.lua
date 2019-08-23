@@ -13,13 +13,17 @@ end
 
 function Bird:update(dt)
 
-    self.vy = self.vy + GRAVITY * dt
+    if scrolling then
+      
+        self.vy = self.vy + GRAVITY * dt
 
-    if love.keyboard.wasPressed('space') then
-        self.vy = -5
+        if love.keyboard.wasPressed('space') then
+            self.vy = -5
+        end
+
+        self.y = self.y + self.vy
+
     end
-
-    self.y = self.y + self.vy
 
 end
 
