@@ -1,5 +1,7 @@
 Pipe = Class{}
 
+collisionNearness = 4
+
 function Pipe:init(orientation, y)
     self.image = love.graphics.newImage('Images/pipe.png')
 
@@ -20,7 +22,6 @@ end
 
 function Pipe:collides(bird, pipeGap)
 
-    collisionNearness = 10
     if self.x + collisionNearness > bird.x + bird.width or bird.x + collisionNearness > self.x + self.width  then
       return false
     end
@@ -34,10 +35,6 @@ function Pipe:collides(bird, pipeGap)
         end
     end
 
-    GRAVITY = 0
-    bird.vy = 0
-    backgroundSpeed = 0
-    groundSpeed = 0
     return true
 end
 
