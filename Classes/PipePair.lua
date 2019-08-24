@@ -5,6 +5,9 @@ function PipePair:init(bottomY, pipeGap)
     self.bottomY = bottomY
     self.topPipe = Pipe('top', self.bottomY)
     self.bottomPipe = Pipe('bottom', self.bottomY + self.pipeGap)
+
+    self.scored = false
+
 end
 
 function PipePair:update(dt)
