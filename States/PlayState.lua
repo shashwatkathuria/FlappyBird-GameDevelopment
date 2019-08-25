@@ -31,17 +31,28 @@ function PlayState:update(dt)
             if pair.bottomPipe.x + pair.bottomPipe.width < 0 then
                 table.remove(self.pipePairs, k)
             end
+            if (not pair.scored) and (pair.bottomPipe.x + pair.bottomPipe.width < self.bird.x) then
+                pair.scored = true
+                score = score + 1
+            end
     end
 
     for i = 1, #self.pipePairs do
         if self.pipePairs[i]:collides(self.bird) then
-          print("Collided", os.time())
-          print("\n\n\n")
+            scrolling = false
         end
     end
 
     if self.bird.y + self.bird.height > VIRTUAL_HEIGHT - 16 then
-        stateMachine:change('title')
+        scrolling = false
+    end
+
+    if not scrolling then
+        GRAVITY = 0
+        self.bird.vy = 0
+        backgroundSpeed = 0
+        groundSpeed = 0
+        stateMachine:change('end')
     end
 
 end
@@ -51,4 +62,8 @@ function PlayState:render()
         self.pipePairs[i]:render()
     end
     self.bird:render()
+
+    love.graphics.setColor(245 / 255, 236 / 255, 66 / 255, 255 / 255)
+    love.graphics.setFont(mediumFont)
+    love.graphics.printf("Score : " .. tostring(score), 0, 0, VIRTUAL_WIDTH, 'left')
 end
