@@ -25,6 +25,7 @@ end
 
 function CountDownState:render()
 
+    -- To make a bird visible on the center of screen during countdown
     Bird():render()
 
     -- Printing countdown
