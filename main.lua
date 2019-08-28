@@ -41,7 +41,6 @@ GRAVITY = 20
 JUMP_VELOCITY = 500
 
 -- Variables to be modified during program
-local pipePairs = {}
 score = 0
 scrolling = true
 
